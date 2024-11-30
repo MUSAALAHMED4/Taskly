@@ -101,7 +101,7 @@ export default (props = {}) => {
               </Nav.Link>
             </div>
             <Nav className="flex-column pt-3 pt-md-0">
-              <NavItem title="Taskly Dashboard " link={Routes.Presentation.path}/>
+              <NavItem title="Taskly Dashboard " link={Routes.DashboardOverview.path}/>
 
               <NavItem title="Dashboard" link={Routes.DashboardOverview.path} icon={faChartPie} />
               <NavItem title="Tasks" link={Routes.Tasks.path} icon={faBook} />
