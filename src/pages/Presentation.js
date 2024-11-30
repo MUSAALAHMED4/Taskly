@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
@@ -133,6 +133,16 @@ export default () => {
     );
   };
 
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    const getToken = async () => {
+      const token = localStorage.getItem("token");
+      setToken(token);
+    };
+    getToken();
+  }, []);
+
   return (
     <>
       <Navbar
@@ -175,14 +185,18 @@ export default () => {
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>
-            <Button
-              as={Link}
-              to={Routes.Signin.path}  
-              variant="outline-white"
-              className="ms-3"
-            >
-              <FontAwesomeIcon icon={faUserCheck} className="me-1" /> Sign In
-            </Button>
+            {token ? (
+              <h3 style={{color: "white"}}>user</h3>
+            ): (
+              <Button
+                as={Link}
+                to={Routes.Signin.path}  
+                variant="outline-white"
+                className="ms-3"
+              >
+                <FontAwesomeIcon icon={faUserCheck} className="me-1" /> Sign In
+              </Button>
+            )}
             <Button
               as={Link}
               to={Routes.Signup.path}  

@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import { faFacebookF, faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -8,9 +8,27 @@ import { Link } from 'react-router-dom';
 
 import { Routes } from "../../routes";
 import BgImage from "../../assets/img/illustrations/signin.svg";
+import axios from "axios";
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const login = async () => {
+    const response = await axios.post('http://localhost:8002/api/v1/token/', {
+      username,
+      password
+    });
+    if (response.status === 200) {
+      localStorage.setItem('token', response.data.access);
+      window.location.href = Routes.DashboardOverview.path;
+    }
+  }
+
+  const logout = () => {
+    localStorage.removeItem('token');
+  }
+
   return (
     <main>
       <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -26,14 +44,26 @@ export default () => {
                 <div className="text-center text-md-center mb-4 mt-md-0">
                   <h3 className="mb-0">Sign in to our platform</h3>
                 </div>
-                <Form className="mt-4">
-                  <Form.Group id="email" className="mb-4">
+                <Form className="mt-4" onSubmit={(e) => {
+                  e.preventDefault();
+                  login();
+                }}>
+                  {/* <Form.Group id="email" className="mb-4">
                     <Form.Label>Your Email</Form.Label>
                     <InputGroup>
                       <InputGroup.Text>
                         <FontAwesomeIcon icon={faEnvelope} />
                       </InputGroup.Text>
                       <Form.Control autoFocus required type="email" placeholder="example@company.com" />
+                    </InputGroup>
+                  </Form.Group> */}
+                  <Form.Group id="username" className="mb-4">
+                    <Form.Label>Your Username</Form.Label>
+                    <InputGroup>
+                      <InputGroup.Text>
+                        <FontAwesomeIcon icon={faEnvelope} />
+                      </InputGroup.Text>
+                      <Form.Control required type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
                     </InputGroup>
                   </Form.Group>
                   <Form.Group>
@@ -43,7 +73,7 @@ export default () => {
                         <InputGroup.Text>
                           <FontAwesomeIcon icon={faUnlockAlt} />
                         </InputGroup.Text>
-                        <Form.Control required type="password" placeholder="Password" />
+                        <Form.Control required type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
                       </InputGroup>
                     </Form.Group>
                     <div className="d-flex justify-content-between align-items-center mb-4">
